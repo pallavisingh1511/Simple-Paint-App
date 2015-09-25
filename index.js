@@ -103,21 +103,17 @@ function drag(event) {
         putImage();
         position = getCanvasCoordinates(event);
         drawCircle(position);
-context.fillStyle = color;
-	context.fill();
+		context.fillStyle = color;
+		context.fill();
     }
 }
 function dragStop(event) {
     draggingDraw = false;
     putImage();
     var position = getCanvasCoordinates(event);
-    drawCircle(position);
-		
-	
-
+    drawCircle(position);		
 	context.fillStyle = color;
-	context.fill();
-	
+	context.fill();	
 	circleCount=circleCount+1;
 	tempCircle = {x:tempX, y:tempY, rad:radius, color:color};
 	
@@ -152,6 +148,16 @@ function drawCircle(position) {
 		context.closePath();
 }
 
+//####################################################################################################################
+//		On click of Erase Button
+//####################################################################################################################
+
+function drawScreen() {
+		circleCount=0;
+		circles = [];
+		context.fillStyle = bgColor;
+		context.fillRect(0,0,canvas.width,canvas.height);
+	}	
 
 //####################################################################################################################
 //		On click of Draw / Move Button
