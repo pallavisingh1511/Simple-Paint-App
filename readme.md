@@ -1,9 +1,9 @@
 
-//####################################################################################################################
-//		Paint Application for Circle
-//		Pallavi Singh
-//####################################################################################################################
-	
+
+		Paint Application for Circle
+		Pallavi Singh
+______________________________________________________________________________________________________________________________________
+
 	Following tasks has been carried in this application using HTML5 Canvas Element
 
 	1.	It lets the user draw circles on the canvas by dragging mouse.
