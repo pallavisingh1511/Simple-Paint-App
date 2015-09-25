@@ -229,6 +229,41 @@ function togglebtn(){
 
 
 //####################################################################################################################
+//		To Delete the Circles	(on double-click)
+//####################################################################################################################
+
+function deleteCircle(event) 
+{
+		var i;
+		var bRect = canvas.getBoundingClientRect();
+//		var highestIndex=-1;
+		dragIndexDelete=-1;
+		
+		mouseX = (event.clientX - bRect.left)*(canvas.width/bRect.width);
+		mouseY = (event.clientY - bRect.top)*(canvas.height/bRect.height);
+		//To find that which circle has been clicked
+		for (i=0; i < circleCount; i++) {
+			if	(isCircleClicked(circles[i], mouseX, mouseY)) {
+				dragIndexDelete = i;		
+			}
+		}
+		//Remove the circle from the array
+		if ( dragIndexDelete> -1 ){
+			circles.splice(dragIndexDelete,1)[0];
+			circleCount=circleCount-1;
+		}
+		
+		if (event.preventDefault) {
+			event.preventDefault();
+		} 
+		else if (event.returnValue) {
+			event.returnValue = false;
+		} 
+		drawCircles();				
+		return false;
+}
+
+//####################################################################################################################
 //		To Move the Circles Manually
 //####################################################################################################################
 	
