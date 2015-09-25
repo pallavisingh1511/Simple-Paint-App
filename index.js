@@ -1,6 +1,6 @@
 //####################################################################################################################
 //		Paint Application for Circle
-//		Pallavi Singh
+//		Submitted by : Pallavi Singh
 //####################################################################################################################
 //Following tasks has been carried in this application using HTML5 Canvas Element
 
@@ -54,6 +54,14 @@
 
 window.addEventListener('load', init, false);
 
+//resizing of canvas, based on the window size	(called on: load, resize of window)
+window.onload = window.onresize = function() 
+	{
+		var canvas = document.getElementById('canvas');
+		canvas.width = window.innerWidth * 0.6;
+		canvas.height = window.innerHeight * 0.8;
+		drawCircles();
+	}	
 
 //initialize global variables	(called on: load of window)	
 function init() 
@@ -85,6 +93,7 @@ function init()
 function dragStart(event) {
     draggingDraw = true;
     dragStartLocation = getCanvasCoordinates(event);
+	color = "rgb(" + Math.floor(Math.random()*200) + "," + Math.floor(Math.random()*200) + "," + Math.floor(Math.random()*200) +")";
     getImage();
 }
 
@@ -94,6 +103,8 @@ function drag(event) {
         putImage();
         position = getCanvasCoordinates(event);
         drawCircle(position);
+context.fillStyle = color;
+	context.fill();
     }
 }
 function dragStop(event) {
@@ -102,7 +113,7 @@ function dragStop(event) {
     var position = getCanvasCoordinates(event);
     drawCircle(position);
 		
-	color = "rgb(" + Math.floor(Math.random()*200) + "," + Math.floor(Math.random()*200) + "," + Math.floor(Math.random()*200) +")";
+	
 
 	context.fillStyle = color;
 	context.fill();
@@ -142,7 +153,6 @@ function drawCircle(position) {
 }
 
 
-
 //####################################################################################################################
 //		On click of Draw / Move Button
 //####################################################################################################################
@@ -175,4 +185,119 @@ function togglebtn(){
 				canvas.addEventListener('mousedown', mouseDown, false);
 	   }
  }
+	
+//####################################################################################################################
+//		To Move/ Delete the Circles 
+//####################################################################################################################
+
+	function drawCircles() {
+		var i;
+		var x;
+		var y;
+		var rad;
+		var color;
+		
+		context.fillStyle = bgColor;
+		context.fillRect(0,0,canvas.width,canvas.height);		
+		
+		for (i=0; i < circleCount; i++) {
+			rad = circles[i].rad;
+			x = circles[i].x;
+			y = circles[i].y;
+			color=circles[i].color;
+			context.beginPath();
+			context.arc(x, y, rad, 0, 2*Math.PI, false);
+			context.closePath();
+			context.fillStyle = color;
+			context.fill();
+		}		
+	}	
+	//To check whether the circle was clicked
+	function isCircleClicked(shape,mx,my) {		
+		var dx;
+		var dy;
+		dx = mx - shape.x;
+		dy = my - shape.y;
+		return (dx*dx + dy*dy < shape.rad*shape.rad);
+	}
+
+
+//####################################################################################################################
+//		To Move the Circles Manually
+//####################################################################################################################
+	
+function mouseDown(event) 
+{
+		var i;
+		var highestIndex = -1;
+		
+		var bRect = canvas.getBoundingClientRect();
+	
+		mouseX = (event.clientX - bRect.left)*(canvas.width/bRect.width);
+		mouseY = (event.clientY - bRect.top)*(canvas.height/bRect.height);
+		
+		//To find that which circle has been clicked
+		for (i=0; i < circleCount; i++) {
+			if	(isCircleClicked(circles[i], mouseX, mouseY)) {
+				draggingMove = true;
+				if (i > highestIndex) {
+					dragX = mouseX - circles[i].x;
+					dragY = mouseY - circles[i].y;
+					highestIndex = i;
+					dragIndexMove = i;
+				}				
+			}
+		}
+		if (draggingMove) {
+			window.addEventListener("mousemove", mouseMove, false);
+			//Remove the circle and then push it to the top of the array
+			circles.push(circles.splice(dragIndexMove,1)[0]);
+			
+		}
+		canvas.removeEventListener("mousedown", mouseDown, false);
+		window.addEventListener("mouseup", mouseUp, false);
+		
+		if (event.preventDefault) {
+				event.preventDefault();
+			} 
+		else if (event.returnValue) {
+				event.returnValue = false;
+			} 
+		return false;
+}
+	
+	function mouseUp(event) {
+
+		canvas.addEventListener("mousedown", mouseDown, false);
+		window.removeEventListener("mouseup", mouseUp, false);
+		if (draggingMove) {
+			draggingMove = false;
+			window.removeEventListener("mousemove", mouseMove, false);
+		}
+	}
+
+	function mouseMove(event) {
+		
+		var posX;
+		var posY;
+		var shapeRad = circles[circleCount-1].rad;
+		var minX = shapeRad;
+		var maxX = canvas.width - shapeRad;
+		var minY = shapeRad;
+		var maxY = canvas.height - shapeRad;
+		
+		var bRect = canvas.getBoundingClientRect();
+		mouseX = (event.clientX - bRect.left)*(canvas.width/bRect.width);
+		mouseY = (event.clientY - bRect.top)*(canvas.height/bRect.height);
+		
+		posX = mouseX - dragX;
+		posX = (posX < minX) ? minX : ((posX > maxX) ? maxX : posX);
+		posY = mouseY - dragY;
+		posY = (posY < minY) ? minY : ((posY > maxY) ? maxY : posY);
+		
+		circles[circleCount-1].x = posX;
+		circles[circleCount-1].y = posY;
+		
+		drawCircles();
+	}
 	
