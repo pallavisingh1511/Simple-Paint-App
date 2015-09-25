@@ -57,6 +57,7 @@ a.tooltipMove span {
     margin-top:250px; margin-left:250px;
     width:200px; line-height:16px;
 }
+
 a.tooltipMove:hover span{
     display:inline; position:absolute; color:#111;
     border:1px solid #DCA; background:#fffAF0;}
@@ -67,6 +68,7 @@ a.tooltipClear span {
     margin-top:400px; margin-left:250px;
     width:200px; line-height:16px;
 }
+
 a.tooltipClear:hover span{
     display:inline; position:absolute; color:#111;
     border:1px solid #DCA; background:#fffAF0;}
@@ -77,6 +79,7 @@ a.tooltipRandom span {
     margin-top:550px; margin-left:250px;
     width:250px; line-height:16px;
 }
+
 a.tooltipRandom:hover span{
     display:inline; position:absolute; color:#111;
     border:1px solid #DCA; background:#fffAF0;}
